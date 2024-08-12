@@ -2,15 +2,12 @@ import { useState } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
-
 import { images } from "../../constants";
-import { createUser } from "../../lib/appwrite";
 import { CustomButton, FormField } from "../../components";
-import { useGlobalContext } from "../../context/GlobalProvider";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignUp = () => {
-  const { setUser, setIsLogged } = useGlobalContext();
-
   const [isSubmitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     username: "",
@@ -25,10 +22,15 @@ const SignUp = () => {
 
     setSubmitting(true);
     try {
-      const result = await createUser(form.email, form.password, form.username);
-      setUser(result);
-      setIsLogged(true);
+      const response = await axios.post(
+        "http://192.168.29.201:3000/api/v1/user/signup",
+        { name: form.username, email: form.email, password: form.password }
+      );
+      //setUser(response.data.id);
+      //setIsLogged(true);
+      await AsyncStorage.setItem("token", response.data.token);
 
+      Alert.alert("Success", "User signed up successfully");
       router.replace("/home");
     } catch (error) {
       Alert.alert("Error", error.message);

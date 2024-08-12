@@ -2,14 +2,12 @@ import { useState } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
-
+import axios from "axios";
 import { images } from "../../constants";
 import { CustomButton, FormField } from "../../components";
-import { getCurrentUser, signIn } from "../../lib/appwrite";
-import { useGlobalContext } from "../../context/GlobalProvider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignIn = () => {
-  const { setUser, setIsLogged } = useGlobalContext();
   const [isSubmitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     email: "",
@@ -24,15 +22,17 @@ const SignIn = () => {
     setSubmitting(true);
 
     try {
-      await signIn(form.email, form.password);
-      const result = await getCurrentUser();
-      setUser(result);
-      setIsLogged(true);
-
+      const response = await axios.post(
+        "http://192.168.29.201:3000/api/v1/user/login",
+        { email: form.email, password: form.password }
+      );
+      //setUser(result);
+      //setIsLogged(true);
+      await AsyncStorage.setItem("token", response.data.token);
       Alert.alert("Success", "User signed in successfully");
       router.replace("/home");
     } catch (error) {
-      Alert.alert("Error", error.message);
+      Alert.alert("error", error.message);
     } finally {
       setSubmitting(false);
     }
