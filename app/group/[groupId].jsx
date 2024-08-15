@@ -15,6 +15,8 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { icons } from "../../constants";
 import AddExpense from "../../components/AddExpense";
+import { ExpenseProvider } from "../../context/ExpenseContext";
+import { API_URL } from "../../constants";
 
 const BillScreen = () => {
   const { groupId } = useLocalSearchParams(); // Get groupId from route parameters
@@ -26,7 +28,7 @@ const BillScreen = () => {
     const token = await AsyncStorage.getItem("token");
     try {
       const response = await axios.post(
-        "http://192.168.29.201:3000/api/v1/groups/fetch-group",
+        `${API_URL}groups/fetch-group`,
         { groupId },
         {
           headers: {
@@ -80,10 +82,12 @@ const BillScreen = () => {
         animationType="slide"
         presentationStyle="pageSheet"
       >
-        <AddExpense
-          onClose={handleCreateModalClose}
-          groupDetails={groupDetails}
-        />
+        <ExpenseProvider>
+          <AddExpense
+            onClose={handleCreateModalClose}
+            groupDetails={groupDetails}
+          />
+        </ExpenseProvider>
       </Modal>
     </SafeAreaView>
   );

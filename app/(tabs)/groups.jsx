@@ -7,7 +7,7 @@ import { CustomButton } from "../../components";
 import { useRouter } from "expo-router";
 import CreateGroup from "../../components/CreateGroup";
 import getInitials from "../../utils/getInitials";
-import { useNavigation } from "@react-navigation/native";
+import { API_URL } from "../../constants";
 import JoinGroup from "../../components/JoinGroup";
 
 const Bookmark = () => {
@@ -19,14 +19,11 @@ const Bookmark = () => {
   const fetchOrganizations = async () => {
     const token = await AsyncStorage.getItem("token");
     try {
-      const response = await axios.get(
-        "http://192.168.29.201:3000/api/v1/groups/show-groups",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${API_URL}groups/show-groups`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       console.log(response.data);
       setGroups(response.data);

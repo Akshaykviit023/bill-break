@@ -10,6 +10,7 @@ const FormField = ({
   handleChangeText,
   otherStyles,
   inputType,
+  extras,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -32,6 +33,9 @@ const FormField = ({
           secureTextEntry={title === "Password" && !showPassword}
           {...props}
         />
+        {extras === "%" && (
+          <Text className="text-gray-100 text-xl ml-3">%</Text>
+        )}
 
         {title === "Password" && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>

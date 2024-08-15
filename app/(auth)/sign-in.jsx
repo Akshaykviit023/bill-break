@@ -6,6 +6,7 @@ import axios from "axios";
 import { images } from "../../constants";
 import { CustomButton, FormField } from "../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_URL } from "../../constants";
 
 const SignIn = () => {
   const [isSubmitting, setSubmitting] = useState(false);
@@ -22,10 +23,10 @@ const SignIn = () => {
     setSubmitting(true);
 
     try {
-      const response = await axios.post(
-        "http://192.168.29.201:3000/api/v1/user/login",
-        { email: form.email, password: form.password }
-      );
+      const response = await axios.post(`${API_URL}user/login`, {
+        email: form.email,
+        password: form.password,
+      });
       //setUser(result);
       //setIsLogged(true);
       await AsyncStorage.setItem("token", response.data.token);
