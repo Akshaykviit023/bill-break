@@ -20,6 +20,44 @@ const CustomizeExpense = ({ visible, onClose, membersObj }) => {
     }
   };
 
+  const switchTabHeader = () => {
+    switch (selectedTab) {
+      case "decimal":
+        return (
+          <View className="mt-10 w-11/12 mx-auto">
+            <Text className="text-center text-gray-300 font-psemibold">
+              Split the bill unequally by amount.
+            </Text>
+            <Text className="text-center text-gray-600 ">
+              Specify exactly how much each person owes.
+            </Text>
+          </View>
+        );
+      case "percentage":
+        return (
+          <View className="mt-10 w-11/12 mx-auto">
+            <Text className="text-center text-gray-300 font-psemibold">
+              Split by percentages.
+            </Text>
+            <Text className="text-center text-gray-600 ">
+              Enter the percentage split that's fair for your situation.
+            </Text>
+          </View>
+        );
+      case "receipt":
+        return (
+          <View className="mt-10 w-11/12 mx-auto">
+            <Text className="text-center text-gray-300 font-psemibold">
+              Scan the bill and split.
+            </Text>
+            <Text className="text-center text-gray-600 ">
+              Specify exactly how much each person owes by items.
+            </Text>
+          </View>
+        );
+    }
+  };
+
   return (
     <Modal visible={visible} animationType="slide">
       <View className="py-16 px-4 bg-primary h-full">
@@ -27,20 +65,15 @@ const CustomizeExpense = ({ visible, onClose, membersObj }) => {
           <TouchableOpacity onPress={() => onClose()}>
             <Text className="text-[#E7EE4F] font-pmedium">Cancel</Text>
           </TouchableOpacity>
-          <Text className="text-white font-psemibold ">Customize Split</Text>
+          <Text className="text-white font-psemibold text-base ">
+            Customize Split
+          </Text>
           <TouchableOpacity onPress={() => onClose()}>
             <Text className="text-[#E7EE4F] font-pmedium">Save</Text>
           </TouchableOpacity>
         </View>
 
-        <View className="mt-12 w-11/12 mx-auto">
-          <Text className="text-center text-gray-300 font-psemibold">
-            Split the bill unequally by amount.
-          </Text>
-          <Text className="text-center text-gray-600 ">
-            Specify exactly how much each person owes.
-          </Text>
-        </View>
+        {switchTabHeader()}
 
         <View className="flex flex-row justify-evenly mt-8">
           <TouchableOpacity
@@ -95,7 +128,9 @@ const CustomizeExpense = ({ visible, onClose, membersObj }) => {
           </TouchableOpacity>
         </View>
 
-        <ScrollView className="mt-8">{switchTabContent()}</ScrollView>
+        <ScrollView className="mt-8" showsVerticalScrollIndicator={false}>
+          {switchTabContent()}
+        </ScrollView>
 
         <View className="fixed bottom-0">
           <Text className="text-white">Footer</Text>

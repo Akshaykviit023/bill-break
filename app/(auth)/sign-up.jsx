@@ -50,14 +50,15 @@ const SignUp = () => {
             minHeight: Dimensions.get("window").height - 100,
           }}
         >
-          <Image
-            source={images.logo}
-            resizeMode="contain"
-            className="w-[115px] h-[34px]"
-          />
+          <View className="flex flex-row gap-1">
+            <Text className="text-white text-3xl font-pbold">Bill</Text>
+            <Text className="text-white text-3xl font-pbold rotate-6">
+              Break
+            </Text>
+          </View>
 
-          <Text className="text-2xl font-semibold text-white mt-10 font-psemibold">
-            Sign Up to Aora
+          <Text className="text-xl font-semibold text-gray-300 mt-10 font-psemibold">
+            Sign Up to Bill Break
           </Text>
 
           <FormField

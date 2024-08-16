@@ -15,11 +15,12 @@ const Welcome = () => {
         }}
       >
         <View className="w-full flex justify-center items-center h-full px-4">
-          <Image
-            source={images.logo}
-            className="w-[130px] h-[84px]"
-            resizeMode="contain"
-          />
+          <View className="flex flex-row gap-1">
+            <Text className="text-white text-3xl font-pbold">Bill</Text>
+            <Text className="text-white text-3xl font-pbold rotate-6">
+              Break
+            </Text>
+          </View>
 
           <Image
             source={images.cards}
@@ -31,7 +32,7 @@ const Welcome = () => {
             <Text className="text-3xl text-white font-bold text-center">
               Discover Endless{"\n"}
               Possibilities with{" "}
-              <Text className="text-secondary-200">Aora</Text>
+              <Text className="text-secondary-200">Bill Break</Text>
             </Text>
 
             <Image

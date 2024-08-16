@@ -1,4 +1,4 @@
-import { Text, View, Modal, TouchableOpacity } from "react-native";
+import { Text, View, Modal, TouchableOpacity, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -51,72 +51,74 @@ const Bookmark = () => {
 
   return (
     <SafeAreaView className="bg-primary h-full">
-      <View className="p-4 flex flex-col">
-        <Text className="text-2xl text-white font-psemibold">Groups</Text>
+      <ScrollView>
+        <View className="p-4 flex flex-col">
+          <Text className="text-2xl text-white font-psemibold">Groups</Text>
 
-        {/*   view to show total you owe   */}
-        <View className="mt-4">
-          <Text className="text-[#E7EE4F] text-lg font-psemibold">
-            You are all settled up!
-          </Text>
-        </View>
+          {/*   view to show total you owe   */}
+          <View className="mt-4">
+            <Text className="text-[#E7EE4F] text-lg font-psemibold">
+              You are all settled up!
+            </Text>
+          </View>
 
-        <View className="flex flex-col  mt-8">
-          {groups.length > 0 ? (
-            groups.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => handleGroupPress(item.id)} // Navigate to BillsScreen with groupId
-                className="flex flex-row items-center bg-black-100 rounded-xl p-4 mt-3"
-              >
-                <View className="h-10 w-10 border border-solid border-[#E7EE4F] rounded-full flex justify-center items-center">
-                  <Text className="text-white">
-                    {getInitials(item.grpName)}
+          <View className="flex flex-col  mt-8">
+            {groups.length > 0 ? (
+              groups.map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => handleGroupPress(item.id)} // Navigate to BillsScreen with groupId
+                  className="flex flex-row items-center bg-black-100 rounded-xl p-4 mt-3"
+                >
+                  <View className="h-10 w-10 border border-solid border-[#E7EE4F] rounded-full flex justify-center items-center">
+                    <Text className="text-white">
+                      {getInitials(item.grpName)}
+                    </Text>
+                  </View>
+                  <Text className="text-lg text-neutral-300 font-semibold ml-4">
+                    {item.grpName}
                   </Text>
-                </View>
-                <Text className="text-lg text-neutral-300 font-semibold ml-4">
-                  {item.grpName}
-                </Text>
-              </TouchableOpacity>
-            ))
-          ) : (
-            <Text>No groups available</Text>
-          )}
-        </View>
-        <View className="flex flex-col items-center mt-12">
-          <CustomButton
-            title="Create Group"
-            handlePress={() => setIsCreateModalVisible(true)}
-            containerStyles="w-full"
-          />
+                </TouchableOpacity>
+              ))
+            ) : (
+              <Text>No groups available</Text>
+            )}
+          </View>
+          <View className="flex flex-col items-center mt-12">
+            <CustomButton
+              title="Create Group"
+              handlePress={() => setIsCreateModalVisible(true)}
+              containerStyles="w-full"
+            />
+          </View>
+
+          <View className="flex flex-col items-center mt-4">
+            <CustomButton
+              title="Join Group"
+              handlePress={() => setIsJoinModalVisible(true)}
+              containerStyles="w-full"
+            />
+          </View>
         </View>
 
-        <View className="flex flex-col items-center mt-4">
-          <CustomButton
-            title="Join Group"
-            handlePress={() => setIsJoinModalVisible(true)}
-            containerStyles="w-full"
-          />
-        </View>
-      </View>
+        <Modal
+          visible={isCreateModalVisible}
+          onRequestClose={handleCreateModalClose}
+          animationType="slide"
+          presentationStyle="pageSheet"
+        >
+          <CreateGroup onClose={handleCreateModalClose} />
+        </Modal>
 
-      <Modal
-        visible={isCreateModalVisible}
-        onRequestClose={handleCreateModalClose}
-        animationType="slide"
-        presentationStyle="pageSheet"
-      >
-        <CreateGroup onClose={handleCreateModalClose} />
-      </Modal>
-
-      <Modal
-        visible={isJoinModalVisible}
-        onRequestClose={handleJoinModalClose}
-        animationType="slide"
-        presentationStyle="pageSheet"
-      >
-        <JoinGroup onClose={handleJoinModalClose} />
-      </Modal>
+        <Modal
+          visible={isJoinModalVisible}
+          onRequestClose={handleJoinModalClose}
+          animationType="slide"
+          presentationStyle="pageSheet"
+        >
+          <JoinGroup onClose={handleJoinModalClose} />
+        </Modal>
+      </ScrollView>
     </SafeAreaView>
   );
 };
