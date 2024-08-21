@@ -1,14 +1,19 @@
 import { View, Text } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FormField from "./FormField";
-const AddDecimal = ({ membersObj }) => {
+
+const AddDecimal = ({ membersObj, onAmountChange }) => {
   const [amounts, setAmounts] = useState({});
+
   const handleAmountChange = (value, memberId) => {
-    setAmounts((prevAmounts) => ({
-      ...prevAmounts,
-      [memberId]: value,
-    }));
+    const updatedAmounts = {
+      ...amounts,
+      [memberId]: parseFloat(value) || 0,
+    };
+    setAmounts(updatedAmounts);
+    onAmountChange(updatedAmounts); // Call the callback function
   };
+
   return (
     <View>
       {membersObj.map((item) => (
@@ -20,7 +25,7 @@ const AddDecimal = ({ membersObj }) => {
             {item.memberName}
           </Text>
           <FormField
-            value={amounts[item.id] || ""}
+            value={amounts[item.id]?.toString() || ""}
             handleChangeText={(e) => handleAmountChange(e, item.id)}
             otherStyles="w-36"
             placeholder="0.00"

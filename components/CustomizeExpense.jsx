@@ -1,22 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Modal, View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { ReceiptText } from "lucide-react-native";
-import FormField from "./FormField";
 import AddDecimal from "./AddDecimal";
 import AddPercentage from "./AddPercentage";
 import AddBill from "./AddBill";
+import { ExpenseContext } from "../context/ExpenseContext";
 
 const CustomizeExpense = ({ visible, onClose, membersObj }) => {
-  const [selectedTab, setSelectedTab] = useState("decimal"); // State to track the selected tab
+  const [selectedTab, setSelectedTab] = useState("decimal");
+  const [totalSplit, setTotalSplit] = useState(0);
+  const { split } = useContext(ExpenseContext); // Get the total amount to be split
+
+  const handleAmountChange = (amounts) => {
+    const sum = Object.values(amounts).reduce((acc, amount) => acc + amount, 0);
+    setTotalSplit(sum);
+  };
 
   const switchTabContent = () => {
     switch (selectedTab) {
       case "decimal":
-        return <AddDecimal membersObj={membersObj} />;
+        return (
+          <AddDecimal
+            membersObj={membersObj}
+            onAmountChange={handleAmountChange}
+          />
+        );
       case "percentage":
         return <AddPercentage membersObj={membersObj} />;
       case "receipt":
-        return <AddBill />;
+        return <AddBill membersObj={membersObj} />;
     }
   };
 
@@ -60,7 +72,7 @@ const CustomizeExpense = ({ visible, onClose, membersObj }) => {
 
   return (
     <Modal visible={visible} animationType="slide">
-      <View className="py-16 px-4 bg-primary h-full">
+      <View className="py-16 px-4 bg-primary h-full relative">
         <View className="flex flex-row justify-between items-center">
           <TouchableOpacity onPress={() => onClose()}>
             <Text className="text-[#E7EE4F] font-pmedium">Cancel</Text>
@@ -132,8 +144,18 @@ const CustomizeExpense = ({ visible, onClose, membersObj }) => {
           {switchTabContent()}
         </ScrollView>
 
-        <View className="fixed bottom-0">
-          <Text className="text-white">Footer</Text>
+        <View className="absolute bottom-0 py-6 left-4 w-full border-t border-solid border-black-200">
+          <Text className="text-white text-base font-pmedium text-center">
+            &#8377; {totalSplit} of &#8377; {split}
+          </Text>
+          <Text
+            className={`${
+              split - totalSplit < 0 ? "text-red-600" : "text-gray-300"
+            } text-center font-pregular`}
+          >
+            {split - totalSplit < 0 ? "-" : ""}
+            &#8377; {Math.abs(split - totalSplit)} left
+          </Text>
         </View>
       </View>
     </Modal>

@@ -30,6 +30,7 @@ const SignIn = () => {
       //setUser(result);
       //setIsLogged(true);
       await AsyncStorage.setItem("token", response.data.token);
+      await AsyncStorage.setItem("userId", response.data.id);
       Alert.alert("Success", "User signed in successfully");
       router.replace("/home");
     } catch (error) {
